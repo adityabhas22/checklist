@@ -4,26 +4,68 @@ import { ButtonHTMLAttributes, forwardRef } from 'react';
 import { cn } from '../utils/cn';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'accent' | 'danger' | 'ghost' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', isLoading, disabled, children, ...props }, ref) => {
-    const baseStyles = "inline-flex items-center justify-center rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+    const baseStyles = `
+      inline-flex items-center justify-center font-medium 
+      transition-all duration-200 ease-out
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 
+      disabled:pointer-events-none disabled:opacity-60
+      active:scale-[0.98] transform-gpu
+      shadow-sm hover:shadow-md
+    `;
     
     const variants = {
-      primary: "bg-[#6c47ff] text-white hover:bg-[#5a3ae6] focus-visible:ring-[#6c47ff]",
-      secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200 focus-visible:ring-gray-500 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700",
-      danger: "bg-red-500 text-white hover:bg-red-600 focus-visible:ring-red-500",
-      ghost: "text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-500 dark:text-gray-300 dark:hover:bg-gray-800"
+      primary: `
+        bg-[var(--primary)] text-white border border-transparent
+        hover:bg-[var(--primary-hover)] hover:shadow-lg hover:-translate-y-0.5
+        focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2
+        shadow-[0_4px_14px_0_rgba(103,126,234,0.25)]
+        hover:shadow-[0_6px_20px_0_rgba(103,126,234,0.35)]
+      `,
+      secondary: `
+        bg-[var(--surface)] text-[var(--foreground)] border border-[var(--surface-border)]
+        hover:bg-[var(--surface-hover)] hover:border-[var(--surface-border-hover)]
+        focus-visible:ring-[var(--foreground-muted)] focus-visible:ring-offset-2
+        hover:-translate-y-0.5
+      `,
+      accent: `
+        bg-[var(--accent)] text-white border border-transparent
+        hover:bg-[var(--accent-hover)] hover:shadow-lg hover:-translate-y-0.5
+        focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2
+        shadow-[0_4px_14px_0_rgba(56,178,172,0.25)]
+        hover:shadow-[0_6px_20px_0_rgba(56,178,172,0.35)]
+      `,
+      danger: `
+        bg-[var(--error)] text-white border border-transparent
+        hover:bg-red-600 hover:shadow-lg hover:-translate-y-0.5
+        focus-visible:ring-[var(--error)] focus-visible:ring-offset-2
+        shadow-[0_4px_14px_0_rgba(245,101,101,0.25)]
+        hover:shadow-[0_6px_20px_0_rgba(245,101,101,0.35)]
+      `,
+      outline: `
+        bg-transparent text-[var(--primary)] border border-[var(--primary)]
+        hover:bg-[var(--primary-light)] hover:text-[var(--primary-dark)]
+        focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2
+        hover:-translate-y-0.5
+      `,
+      ghost: `
+        bg-transparent text-[var(--foreground-muted)] border border-transparent
+        hover:bg-[var(--surface-hover)] hover:text-[var(--foreground)]
+        focus-visible:ring-[var(--foreground-muted)] focus-visible:ring-offset-2
+        hover:-translate-y-0.5
+      `
     };
     
     const sizes = {
-      sm: "h-8 px-3 text-sm",
-      md: "h-10 px-4 text-sm",
-      lg: "h-12 px-6 text-base"
+      sm: "h-8 px-3 text-xs rounded-[var(--radius-md)] gap-1.5",
+      md: "h-10 px-4 text-sm rounded-[var(--radius-lg)] gap-2",
+      lg: "h-12 px-6 text-base rounded-[var(--radius-lg)] gap-2.5"
     };
 
     return (
@@ -39,7 +81,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading && (
-          <svg className="mr-2 h-4 w-4 animate-spin" viewBox="0 0 24 24">
+          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
             <circle
               className="opacity-25"
               cx="12"

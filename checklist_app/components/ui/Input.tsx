@@ -13,22 +13,59 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="space-y-2">
         {label && (
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="text-sm font-semibold text-[var(--foreground-secondary)] tracking-wide">
             {label}
           </label>
         )}
-        <input
-          type={type}
-          className={cn(
-            "flex h-10 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6c47ff] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:ring-offset-gray-900 dark:placeholder:text-gray-400",
-            error && "border-red-500 focus-visible:ring-red-500",
-            className
+        <div className="relative">
+          <input
+            type={type}
+            className={cn(
+              `
+                flex h-11 w-full rounded-[var(--radius-lg)] 
+                border border-[var(--surface-border)]
+                bg-[var(--surface)] 
+                px-4 py-3 text-sm font-medium
+                text-[var(--foreground)]
+                placeholder:text-[var(--foreground-light)] placeholder:font-normal
+                transition-all duration-200 ease-out
+                
+                focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2
+                focus:border-[var(--primary)] focus:bg-[var(--surface)]
+                focus:shadow-[0_0_0_3px_rgba(103,126,234,0.1)]
+                
+                hover:border-[var(--surface-border-hover)]
+                hover:shadow-[var(--shadow-sm)]
+                
+                disabled:cursor-not-allowed disabled:opacity-60
+                disabled:bg-[var(--background-secondary)]
+                
+                file:border-0 file:bg-transparent file:text-sm file:font-medium
+              `,
+              error && `
+                border-[var(--error)] focus:border-[var(--error)] 
+                focus:ring-[var(--error)] focus:shadow-[0_0_0_3px_rgba(245,101,101,0.1)]
+              `,
+              className
+            )}
+            ref={ref}
+            {...props}
+          />
+          {error && (
+            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+              <svg className="h-4 w-4 text-[var(--error)]" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+              </svg>
+            </div>
           )}
-          ref={ref}
-          {...props}
-        />
+        </div>
         {error && (
-          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+          <p className="text-xs font-medium text-[var(--error)] flex items-center gap-1.5">
+            <svg className="h-3 w-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m0 0v.008h.008V12.75H12zm0 4.5h.008v.008H12v-.008z" />
+            </svg>
+            {error}
+          </p>
         )}
       </div>
     );
