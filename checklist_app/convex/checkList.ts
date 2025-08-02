@@ -17,14 +17,14 @@ export const createCheckList = mutation({
 });
 
 export const getCheckListItems = query({
-  args: {
-    userId: v.id("users"),
-  },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
     const user = await getCurrentUserOrThrow(ctx);
-    return ctx.db
+    const items = await ctx.db
       .query("checkListItems")
-      .withIndex("by_userId", (q) => q.eq("userId", user._id));
+      .withIndex("by_userId", (q) => q.eq("userId", user._id))
+      .collect();
+    return items;
   },
 });
 
